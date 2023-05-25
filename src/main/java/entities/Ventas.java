@@ -122,7 +122,17 @@ public class Ventas implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Ventas[ idVenta=" + idVenta + " ]";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Ventas{");
+        sb.append("idVenta=").append(idVenta);
+        sb.append(", fecha=").append(fecha);
+        sb.append(", importe=").append(importe);
+        sb.append(", tipoPago=").append(tipoPago);
+        sb.append(", idProducto=").append(idProducto);
+        sb.append('}');
+        return sb.toString();
     }
+
+    
     
 }

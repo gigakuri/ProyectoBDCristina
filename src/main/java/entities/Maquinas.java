@@ -112,7 +112,15 @@ public class Maquinas implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Maquinas[ idMaquina=" + idMaquina + " ]";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Maquinas{");
+        sb.append("idMaquina=").append(idMaquina);
+        sb.append(", numSerie=").append(numSerie);
+        sb.append(", saldo=").append(saldo);
+        sb.append('}');
+        return sb.toString();
     }
+
+    
     
 }
