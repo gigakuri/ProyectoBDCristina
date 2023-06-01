@@ -4,7 +4,6 @@
  */
 package controllers;
 
-import controllers.exceptions.IllegalOrphanException;
 import controllers.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -13,15 +12,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entities.Maquinas;
 import entities.Productos;
-import entities.Ventas;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author cristina
+ * @author Gigak
  */
 public class ProductosJpaController implements Serializable {
 
@@ -35,9 +32,6 @@ public class ProductosJpaController implements Serializable {
     }
 
     public void create(Productos productos) {
-        if (productos.getVentasList() == null) {
-            productos.setVentasList(new ArrayList<Ventas>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -47,25 +41,10 @@ public class ProductosJpaController implements Serializable {
                 idMaquina = em.getReference(idMaquina.getClass(), idMaquina.getIdMaquina());
                 productos.setIdMaquina(idMaquina);
             }
-            List<Ventas> attachedVentasList = new ArrayList<Ventas>();
-            for (Ventas ventasListVentasToAttach : productos.getVentasList()) {
-                ventasListVentasToAttach = em.getReference(ventasListVentasToAttach.getClass(), ventasListVentasToAttach.getIdVenta());
-                attachedVentasList.add(ventasListVentasToAttach);
-            }
-            productos.setVentasList(attachedVentasList);
             em.persist(productos);
             if (idMaquina != null) {
                 idMaquina.getProductosList().add(productos);
                 idMaquina = em.merge(idMaquina);
-            }
-            for (Ventas ventasListVentas : productos.getVentasList()) {
-                Productos oldIdProductoOfVentasListVentas = ventasListVentas.getIdProducto();
-                ventasListVentas.setIdProducto(productos);
-                ventasListVentas = em.merge(ventasListVentas);
-                if (oldIdProductoOfVentasListVentas != null) {
-                    oldIdProductoOfVentasListVentas.getVentasList().remove(ventasListVentas);
-                    oldIdProductoOfVentasListVentas = em.merge(oldIdProductoOfVentasListVentas);
-                }
             }
             em.getTransaction().commit();
         } finally {
@@ -75,7 +54,7 @@ public class ProductosJpaController implements Serializable {
         }
     }
 
-    public void edit(Productos productos) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Productos productos) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -83,31 +62,10 @@ public class ProductosJpaController implements Serializable {
             Productos persistentProductos = em.find(Productos.class, productos.getIdProducto());
             Maquinas idMaquinaOld = persistentProductos.getIdMaquina();
             Maquinas idMaquinaNew = productos.getIdMaquina();
-            List<Ventas> ventasListOld = persistentProductos.getVentasList();
-            List<Ventas> ventasListNew = productos.getVentasList();
-            List<String> illegalOrphanMessages = null;
-            for (Ventas ventasListOldVentas : ventasListOld) {
-                if (!ventasListNew.contains(ventasListOldVentas)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Ventas " + ventasListOldVentas + " since its idProducto field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
             if (idMaquinaNew != null) {
                 idMaquinaNew = em.getReference(idMaquinaNew.getClass(), idMaquinaNew.getIdMaquina());
                 productos.setIdMaquina(idMaquinaNew);
             }
-            List<Ventas> attachedVentasListNew = new ArrayList<Ventas>();
-            for (Ventas ventasListNewVentasToAttach : ventasListNew) {
-                ventasListNewVentasToAttach = em.getReference(ventasListNewVentasToAttach.getClass(), ventasListNewVentasToAttach.getIdVenta());
-                attachedVentasListNew.add(ventasListNewVentasToAttach);
-            }
-            ventasListNew = attachedVentasListNew;
-            productos.setVentasList(ventasListNew);
             productos = em.merge(productos);
             if (idMaquinaOld != null && !idMaquinaOld.equals(idMaquinaNew)) {
                 idMaquinaOld.getProductosList().remove(productos);
@@ -116,17 +74,6 @@ public class ProductosJpaController implements Serializable {
             if (idMaquinaNew != null && !idMaquinaNew.equals(idMaquinaOld)) {
                 idMaquinaNew.getProductosList().add(productos);
                 idMaquinaNew = em.merge(idMaquinaNew);
-            }
-            for (Ventas ventasListNewVentas : ventasListNew) {
-                if (!ventasListOld.contains(ventasListNewVentas)) {
-                    Productos oldIdProductoOfVentasListNewVentas = ventasListNewVentas.getIdProducto();
-                    ventasListNewVentas.setIdProducto(productos);
-                    ventasListNewVentas = em.merge(ventasListNewVentas);
-                    if (oldIdProductoOfVentasListNewVentas != null && !oldIdProductoOfVentasListNewVentas.equals(productos)) {
-                        oldIdProductoOfVentasListNewVentas.getVentasList().remove(ventasListNewVentas);
-                        oldIdProductoOfVentasListNewVentas = em.merge(oldIdProductoOfVentasListNewVentas);
-                    }
-                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -145,7 +92,7 @@ public class ProductosJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -156,17 +103,6 @@ public class ProductosJpaController implements Serializable {
                 productos.getIdProducto();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The productos with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            List<Ventas> ventasListOrphanCheck = productos.getVentasList();
-            for (Ventas ventasListOrphanCheckVentas : ventasListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Productos (" + productos + ") cannot be destroyed since the Ventas " + ventasListOrphanCheckVentas + " in its ventasList field has a non-nullable idProducto field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Maquinas idMaquina = productos.getIdMaquina();
             if (idMaquina != null) {

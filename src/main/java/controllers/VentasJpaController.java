@@ -5,20 +5,19 @@
 package controllers;
 
 import controllers.exceptions.NonexistentEntityException;
+import entities.Ventas;
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import entities.Productos;
-import entities.Ventas;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author cristina
+ * @author Gigak
  */
 public class VentasJpaController implements Serializable {
 
@@ -36,16 +35,7 @@ public class VentasJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Productos idProducto = ventas.getIdProducto();
-            if (idProducto != null) {
-                idProducto = em.getReference(idProducto.getClass(), idProducto.getIdProducto());
-                ventas.setIdProducto(idProducto);
-            }
             em.persist(ventas);
-            if (idProducto != null) {
-                idProducto.getVentasList().add(ventas);
-                idProducto = em.merge(idProducto);
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -59,22 +49,7 @@ public class VentasJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Ventas persistentVentas = em.find(Ventas.class, ventas.getIdVenta());
-            Productos idProductoOld = persistentVentas.getIdProducto();
-            Productos idProductoNew = ventas.getIdProducto();
-            if (idProductoNew != null) {
-                idProductoNew = em.getReference(idProductoNew.getClass(), idProductoNew.getIdProducto());
-                ventas.setIdProducto(idProductoNew);
-            }
             ventas = em.merge(ventas);
-            if (idProductoOld != null && !idProductoOld.equals(idProductoNew)) {
-                idProductoOld.getVentasList().remove(ventas);
-                idProductoOld = em.merge(idProductoOld);
-            }
-            if (idProductoNew != null && !idProductoNew.equals(idProductoOld)) {
-                idProductoNew.getVentasList().add(ventas);
-                idProductoNew = em.merge(idProductoNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -103,11 +78,6 @@ public class VentasJpaController implements Serializable {
                 ventas.getIdVenta();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The ventas with id " + id + " no longer exists.", enfe);
-            }
-            Productos idProducto = ventas.getIdProducto();
-            if (idProducto != null) {
-                idProducto.getVentasList().remove(ventas);
-                idProducto = em.merge(idProducto);
             }
             em.remove(ventas);
             em.getTransaction().commit();

@@ -19,7 +19,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author cristina
+ * @author Gigak
  */
 public class MaquinasJpaController implements Serializable {
 

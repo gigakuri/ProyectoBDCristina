@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -50,7 +51,9 @@ public class Ventas implements Serializable {
     @Column(name = "tipoPago")
     private String tipoPago;
     @JoinColumn(name = "idProducto", referencedColumnName = "idProducto")
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
+    /*@JoinColumn(name="despacho",
+referencedColumnName="idDespacho, updatable=false)*/
     private Productos idProducto;
 
     public Ventas() {

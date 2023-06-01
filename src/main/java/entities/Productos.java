@@ -49,8 +49,6 @@ public class Productos implements Serializable {
     private BigDecimal precio;
     @Column(name = "stock")
     private Integer stock;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
-    private List<Ventas> ventasList;
     @JoinColumn(name = "idMaquina", referencedColumnName = "idMaquina")
     @ManyToOne
     private Maquinas idMaquina;
@@ -97,14 +95,6 @@ public class Productos implements Serializable {
 
     public void setStock(Integer stock) {
         this.stock = stock;
-    }
-
-    public List<Ventas> getVentasList() {
-        return ventasList;
-    }
-
-    public void setVentasList(List<Ventas> ventasList) {
-        this.ventasList = ventasList;
     }
 
     public Maquinas getIdMaquina() {
