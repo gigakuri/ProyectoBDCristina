@@ -49,13 +49,13 @@ public class Maquinas implements Serializable {
     public Maquinas() {
     }
 
-    public Maquinas(Integer idMaquina) {
-        this.idMaquina = idMaquina;
+    public Maquinas(String numSerie) {
+        this.numSerie = numSerie;
     }
 
-    public Maquinas(Integer idMaquina, String numSerie) {
-        this.idMaquina = idMaquina;
+    public Maquinas(String numSerie, BigDecimal saldo) {
         this.numSerie = numSerie;
+        this.saldo = saldo;
     }
 
     public Integer getIdMaquina() {
@@ -113,11 +113,10 @@ public class Maquinas implements Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Maquinas{");
-        sb.append("idMaquina=").append(idMaquina);
-        sb.append(", numSerie=").append(numSerie);
-        sb.append(", saldo=").append(saldo);
-        sb.append('}');
+        sb.append(",").append(idMaquina);
+        sb.append(",").append(numSerie);
+        sb.append(",").append(saldo);
+        sb.append(";");
         return sb.toString();
     }
 

@@ -52,15 +52,20 @@ public class Ventas implements Serializable {
     private String tipoPago;
     @JoinColumn(name = "idProducto", referencedColumnName = "idProducto")
     @OneToOne(optional = false)
-    /*@JoinColumn(name="despacho",
-referencedColumnName="idDespacho, updatable=false)*/
     private Productos idProducto;
 
     public Ventas() {
     }
 
-    public Ventas(Integer idVenta) {
-        this.idVenta = idVenta;
+    public Ventas(Productos idProducto) {
+        this.idProducto = idProducto;
+    }
+    
+    public Ventas(Date fecha, BigDecimal importe, String tipoPago, Productos idProducto) {
+        this.fecha = fecha;
+        this.importe = importe;
+        this.tipoPago = tipoPago;
+        this.idProducto = idProducto;
     }
 
     public Integer getIdVenta() {
@@ -126,13 +131,12 @@ referencedColumnName="idDespacho, updatable=false)*/
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Ventas{");
-        sb.append("idVenta=").append(idVenta);
-        sb.append(", fecha=").append(fecha);
-        sb.append(", importe=").append(importe);
-        sb.append(", tipoPago=").append(tipoPago);
-        sb.append(", idProducto=").append(idProducto);
-        sb.append('}');
+        sb.append(",").append(idVenta);
+        sb.append(",").append(fecha);
+        sb.append(",").append(importe);
+        sb.append(",").append(tipoPago);
+        sb.append(",").append(idProducto);
+        sb.append(";");
         return sb.toString();
     }
 

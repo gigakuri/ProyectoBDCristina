@@ -56,13 +56,15 @@ public class Productos implements Serializable {
     public Productos() {
     }
 
-    public Productos(Integer idProducto) {
-        this.idProducto = idProducto;
+    public Productos(String nombre) {
+        this.nombre = nombre;
     }
 
-    public Productos(Integer idProducto, String nombre) {
-        this.idProducto = idProducto;
+    public Productos(String nombre, BigDecimal precio, Integer stock, Maquinas idMaquina) {
         this.nombre = nombre;
+        this.precio = precio;
+        this.stock = stock;
+        this.idMaquina = idMaquina;
     }
 
     public Integer getIdProducto() {
@@ -128,13 +130,12 @@ public class Productos implements Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Productos{");
-        sb.append("idProducto=").append(idProducto);
-        sb.append(", nombre=").append(nombre);
-        sb.append(", precio=").append(precio);
-        sb.append(", stock=").append(stock);
-        sb.append(", idMaquina=").append(idMaquina);
-        sb.append('}');
+        sb.append(",").append(idProducto);
+        sb.append(",").append(nombre);
+        sb.append(",").append(precio);
+        sb.append(",").append(stock);
+        sb.append(",").append(idMaquina);
+        sb.append(";");
         return sb.toString();
     }
 

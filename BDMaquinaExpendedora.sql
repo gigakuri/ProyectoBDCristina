@@ -19,6 +19,7 @@ create table productos (
     idMaquina int,
 		constraint pk_id primary key (idProducto),
         constraint fk_productos_maquina foreign key (idMaquina) references maquinas(idMaquina)
+			on delete cascade
 );
 
 drop table if exists ventas;
@@ -63,3 +64,6 @@ values
 (19,'Lays Campesinas',1.50,15,3000),
 (20,'Chocolate Milka',2.10,10,3000),
 (21,'Chocolate Milka blanco',2.10,10,3000);
+
+use BDMaquinaExpendedora;
+select * from productos;
