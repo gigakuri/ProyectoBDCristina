@@ -35,7 +35,7 @@ public class Consultas {
         "--- Prueba a borrar una entidad de cada tipo ---");
         
         
-        //Consulta
+        //CONSULTA
         System.out.println("--- Máquinas expendedoras ---");
         List<Maquinas> listaMaquinas = maquinaJPA.findMaquinasEntities();
         System.out.println(listaMaquinas);
@@ -46,7 +46,7 @@ public class Consultas {
         List<Ventas> listaVentas = ventaJPA.findVentasEntities();
         System.out.println(listaVentas);
         
-        //Creación
+        //CREACIÓN
 //        Maquinas mPrueba = new Maquinas("prueba");
 //        maquinaJPA.create(mPrueba);
 //        System.out.println("MÁQUINAS: \n" + listaMaquinas);
@@ -57,7 +57,7 @@ public class Consultas {
 //        ventaJPA.create(pVenta);
 //        System.out.println("VENTAS: \n" + listaVentas);
         
-        //Modificación
+        //MODIFICACIÓN
 //        mPrueba.setNumSerie("999-999-999");
 //        maquinaJPA.edit(mPrueba);
 //        System.out.println("MÁQUINAS: \n" + listaMaquinas);
