@@ -4,6 +4,7 @@
  */
 package application;
 
+import controllers.exceptions.NonexistentEntityException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -13,7 +14,7 @@ import javax.swing.JPanel;
  */
 public class MaquinaExpendedora {
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NonexistentEntityException {
         
         JFrame ventanaPrincipal = crearVentana("Máquina expendedora", new PanelMaquinaExpendedora());
         

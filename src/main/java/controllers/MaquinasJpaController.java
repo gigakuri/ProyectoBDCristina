@@ -186,4 +186,16 @@ public class MaquinasJpaController implements Serializable {
         }
     }
     
+    public String[] verMaquinas() throws NonexistentEntityException {
+        List<Maquinas> listaMaquinas = findMaquinasEntities();
+        String[] maquinas = new String[listaMaquinas.size()];
+
+        for (int i = 1; i < listaMaquinas.size(); i++) {
+            maquinas[i] = listaMaquinas.get(i).toString();
+        }
+
+        return maquinas;
+
+    }
+    
 }

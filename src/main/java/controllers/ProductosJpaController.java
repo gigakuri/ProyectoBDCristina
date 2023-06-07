@@ -164,4 +164,16 @@ public class ProductosJpaController implements Serializable {
         }
     }
     
+    public String[] verProductos() throws NonexistentEntityException {
+        List<Productos> listaProductos = findProductosEntities();
+        String[] productos = new String[listaProductos.size()];
+
+        for (int i = 1; i < listaProductos.size(); i++) {
+            productos[i] = listaProductos.get(i).toString();
+        }
+
+        return productos;
+
+    }
+    
 }
