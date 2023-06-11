@@ -130,12 +130,11 @@ public class Productos implements Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(",").append(idProducto);
+        sb.append(idProducto);
         sb.append(",").append(nombre);
         sb.append(",").append(precio);
         sb.append(",").append(stock);
         sb.append(",").append(idMaquina);
-        sb.append(";");
         return sb.toString();
     }
 

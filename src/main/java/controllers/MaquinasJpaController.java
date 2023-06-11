@@ -19,7 +19,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author Gigak
+ * @author cristina
  */
 public class MaquinasJpaController implements Serializable {
 
@@ -185,17 +185,31 @@ public class MaquinasJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public String[] verMaquinas() throws NonexistentEntityException {
         List<Maquinas> listaMaquinas = findMaquinasEntities();
         String[] maquinas = new String[listaMaquinas.size()];
 
-        for (int i = 1; i < listaMaquinas.size(); i++) {
-            maquinas[i] = listaMaquinas.get(i).toString();
+        for (int i = 0; i < listaMaquinas.size(); i++) {
+            maquinas[i] = listaMaquinas.get(i).getIdMaquina().toString()
+                    + "  |  " + listaMaquinas.get(i).getNumSerie();
         }
 
         return maquinas;
 
     }
-    
+
+    public String[] verProductos(int idMaquina) throws NonexistentEntityException {
+
+            List<Productos> listaProductos = findMaquinas(idMaquina).getProductosList();
+            String[] productos = new String[listaProductos.size()];
+
+            for (int i = 0; i < listaProductos.size(); i++) {
+                productos[i] = listaProductos.get(i).getIdProducto().toString()
+                        + "  |  " + listaProductos.get(i).getNombre()
+                        + "    " + listaProductos.get(i).getPrecio().toString() + "€";
+            }
+            return productos;
+    }
+
 }

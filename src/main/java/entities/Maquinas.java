@@ -113,10 +113,9 @@ public class Maquinas implements Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(",").append(idMaquina);
+        sb.append(idMaquina);
         sb.append(",").append(numSerie);
         sb.append(",").append(saldo);
-        sb.append(";");
         return sb.toString();
     }
 

@@ -6,6 +6,7 @@ package entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -14,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -62,6 +62,14 @@ public class Ventas implements Serializable {
     }
     
     public Ventas(Date fecha, BigDecimal importe, String tipoPago, Productos idProducto) {
+        this.fecha = fecha;
+        this.importe = importe;
+        this.tipoPago = tipoPago;
+        this.idProducto = idProducto;
+    }
+
+    public Ventas(Integer idVenta, Date fecha, BigDecimal importe, String tipoPago, Productos idProducto) {
+        this.idVenta = idVenta;
         this.fecha = fecha;
         this.importe = importe;
         this.tipoPago = tipoPago;
@@ -131,12 +139,11 @@ public class Ventas implements Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(",").append(idVenta);
+        sb.append(idVenta);
         sb.append(",").append(fecha);
         sb.append(",").append(importe);
         sb.append(",").append(tipoPago);
         sb.append(",").append(idProducto);
-        sb.append(";");
         return sb.toString();
     }
 

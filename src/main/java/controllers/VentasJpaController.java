@@ -17,7 +17,7 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author Gigak
+ * @author cristina
  */
 public class VentasJpaController implements Serializable {
 
@@ -132,6 +132,18 @@ public class VentasJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public String[] verVentas() throws NonexistentEntityException {
+        List<Ventas> listaVentas = findVentasEntities();
+        String[] ventas = new String[listaVentas.size()];
+
+        for (int i = 0; i < listaVentas.size(); i++) {
+            ventas[i] = listaVentas.get(i).toString();
+        }
+
+        return ventas;
+
     }
     
 }
