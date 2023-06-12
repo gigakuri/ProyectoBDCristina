@@ -140,7 +140,7 @@ public class Ventas implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(idVenta);
-        sb.append(",").append(fecha);
+        sb.append(",").append(new SimpleDateFormat("yyyy-MM-dd").format(fecha));
         sb.append(",").append(importe);
         sb.append(",").append(tipoPago);
         sb.append(",").append(idProducto);

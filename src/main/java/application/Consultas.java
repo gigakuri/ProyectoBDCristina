@@ -11,7 +11,6 @@ import controllers.VentasJpaController;
 import entities.Maquinas;
 import entities.Productos;
 import entities.Ventas;
-import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
