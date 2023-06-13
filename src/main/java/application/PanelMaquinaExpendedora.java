@@ -7,12 +7,17 @@ package application;
 import controllers.exceptions.NonexistentEntityException;
 import entities.Ventas;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
 /**
  *
@@ -20,11 +25,45 @@ import java.util.logging.Logger;
  */
 public class PanelMaquinaExpendedora extends javax.swing.JPanel {
 
+    private static String tipoPago;
+
     /**
      * Creates new form PanelMaquinaExpendedora
      */
     public PanelMaquinaExpendedora() throws NonexistentEntityException {
         initComponents();
+        ListCellRenderer cellRenderer = new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                JLabel renderer = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+                String text = value.toString();
+                StringBuilder wrappedText = new StringBuilder("<html>");
+                int comas = 0;
+
+                for (int i = 0; i < text.length(); i++) {
+                    char c = text.charAt(i);
+                    wrappedText.append(c);
+                    if (c == ',') {
+                        comas++;
+                    }
+
+                    if (comas >= 4 && i < text.length() - 1) {
+                        wrappedText.append("<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                        comas = 0;
+                    }
+                }
+
+                wrappedText.append("</html>");
+                renderer.setText(wrappedText.toString());
+
+                return renderer;
+            }
+        };
+
+        jList3.setCellRenderer(cellRenderer);
 
         jLabel5.addMouseListener(new MouseAdapter() {
             @Override
@@ -32,11 +71,13 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
                 jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/botonCruz2.png")));;
             }
         });
-        
+
         //Apartado de selección de máquinas oculto
         jLabel5.setVisible(false);
         jTextField2.setVisible(false);
         jButton4.setVisible(false);
+        jList2.setVisible(false);
+        jScrollPane3.setVisible(false);
 
         //Apartado de ventas en oculto
         jLabel11.setVisible(false);
@@ -45,6 +86,8 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jButton2.setVisible(false);
         jLabel13.setVisible(false);
         jLabel14.setVisible(false);
+        jScrollPane1.setVisible(false);
+        jList3.setVisible(false);
 
         //Mostrar lista de máquinas
         jList2.setListData(Consultas.maquinaJPA.verMaquinas());
@@ -64,6 +107,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
@@ -71,7 +115,6 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
-        jLabel16 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList<>();
         jTextField2 = new javax.swing.JTextField();
@@ -80,7 +123,6 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList3 = new javax.swing.JList<>();
         jLabel10 = new javax.swing.JLabel();
@@ -106,14 +148,26 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jPanel1.setPreferredSize(new java.awt.Dimension(1050, 700));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jComboBox1.setBackground(new java.awt.Color(204, 204, 204));
+        jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jComboBox1.setForeground(new java.awt.Color(0, 0, 0));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tarjeta", "Efectivo" }));
+        jComboBox1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
+        jComboBox1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 390, 70, 20));
+
         jLabel15.setForeground(new java.awt.Color(0, 0, 0));
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/botonCruz.png"))); // NOI18N
+        jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel15MouseClicked(evt);
             }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jLabel15MousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel15MouseReleased(evt);
             }
         });
         jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 530, -1, 40));
@@ -122,6 +176,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jButton1.setForeground(new java.awt.Color(204, 204, 204));
         jButton1.setText("Ventas");
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton1MouseClicked(evt);
@@ -134,6 +189,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 260, 50, 50));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/comprar-ahora.png"))); // NOI18N
+        jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel9MouseClicked(evt);
@@ -142,6 +198,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 160, 70, 70));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/apagar.png"))); // NOI18N
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);
@@ -164,10 +221,6 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jScrollPane2.setViewportView(jList1);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 220, 340));
-
-        jLabel16.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/parche.jpg"))); // NOI18N
-        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 170, 70));
 
         jList2.setBackground(new java.awt.Color(255, 255, 255));
         jList2.setBorder(null);
@@ -206,10 +259,6 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/poster.jpg"))); // NOI18N
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 20, -1, -1));
 
-        jLabel12.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/parche.jpg"))); // NOI18N
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 280, 170));
-
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
 
         jList3.setBackground(new java.awt.Color(255, 255, 255));
@@ -226,6 +275,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jButton2.setBackground(new java.awt.Color(255, 255, 255));
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
         jButton2.setText("Modifcar");
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton2MouseClicked(evt);
@@ -241,6 +291,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jButton3.setBackground(new java.awt.Color(255, 255, 255));
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
         jButton3.setText("Borrar");
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton3MouseClicked(evt);
@@ -259,6 +310,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jButton4.setForeground(new java.awt.Color(0, 51, 0));
         jButton4.setText("✔");
         jButton4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton4.setRequestFocusEnabled(false);
         jButton4.setRolloverEnabled(false);
         jButton4.setVerifyInputWhenFocusTarget(false);
@@ -299,30 +351,67 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         // TODO add your handling code here:
-        //MOSTRAR SELECCIÓN DE MÁQUINAS
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/encender.png")));
-        jLabel16.setVisible(false);
-        jLabel5.setVisible(true);
-        jTextField2.setVisible(true);
-        jButton4.setVisible(true);
+        /* SI LA MÁQUINA ESTÁ APAGADA */
+        if (jLabel1.getIcon().toString().equals(getClass().getResource("/Images/apagar.png").toString())) {
+            //MOSTRAR SELECCIÓN DE MÁQUINAS
+            jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/encender.png")));
+            jList2.setVisible(true);
+            jScrollPane3.setVisible(true);
+            jLabel5.setVisible(true);
+            jTextField2.setVisible(true);
+            jButton4.setVisible(true);
+        } else {
+            /* SI LA MÁQUINA ESTÁ ENCENDIDA */
+            //OCULTAR SELECCIÓN DE MÁQUINAS
+            jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/apagar.png")));
+            jList2.setVisible(false);
+            jScrollPane3.setVisible(false);
+            jLabel5.setVisible(false);
+            jTextField2.setVisible(false);
+            jButton4.setVisible(false);
+            jList2.setSelectedValue(null, true);
+            /* quita la selección */
+            jTextField2.setText("");
+            /* vacía la pantalla de la máquina seleccionada */
+
+            //OCULTAR VENTAS
+            jList3.setVisible(false);
+            jScrollPane1.setVisible(false);
+            jLabel11.setVisible(false);
+            jLabel10.setVisible(false);
+            jButton3.setVisible(false);
+            jButton2.setVisible(false);
+            jLabel13.setVisible(false);
+            jLabel14.setVisible(false);
+            jList1.setListData(new String[1]);
+            /* vacía lista de productos de la máquina */
+            jTextField1.setText("");
+            /* vacía la pantalla del producto seleccionado */
+        }
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // TODO add your handling code here:
         String linea = jList1.getSelectedValue();
-        String[] tokens = linea.split("\\|");
-        jTextField1.setText(tokens[0].trim());
+        // Si selecciona un producto, puede crear la venta
+        if (linea != null) {
+            String[] tokens = linea.split("\\|");
+            jTextField1.setText(tokens[0].trim());
 
-        //CREAR VENTA
-        try {
+            //Tipo de pago
+            tipoPago = jComboBox1.getSelectedItem().toString();
+
+            //CREAR VENTA
             Consultas.ventaJPA.create(new Ventas(Date.valueOf(LocalDate.now()),
                     Consultas.productoJPA.findProductos(Integer.valueOf(tokens[0].trim())).getPrecio(),
-                    "prueba", Consultas.productoJPA.findProductos(Integer.valueOf(tokens[0].trim()))));
+                    tipoPago, Consultas.productoJPA.findProductos(Integer.valueOf(tokens[0].trim()))));
 
-        } catch (NumberFormatException e) {
-            Consultas.ventaJPA.create(new Ventas(Date.valueOf(LocalDate.now()),
-                    Consultas.productoJPA.findProductos(Integer.valueOf(tokens[0].trim())).getPrecio(),
-                    null, Consultas.productoJPA.findProductos(Integer.valueOf(tokens[0].trim()))));
+            /*refrescar lista*/
+            try {
+                jList3.setListData(Consultas.ventaJPA.verVentas());
+            } catch (NonexistentEntityException ex) {
+                // Exception
+            }
         }
 
     }//GEN-LAST:event_jLabel9MouseClicked
@@ -333,44 +422,52 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         // TODO add your handling code here:
+        // Si no hay nada seleccionado, no hace nada
         String linea = jList3.getSelectedValue();
-        String[] tokens = linea.split(",");
+        if (linea != null) {
+            String[] tokens = linea.split(" , ");
 
-        //BORRAR VENTA
-        try {
-            Consultas.ventaJPA.destroy(Integer.parseInt(tokens[0].trim()));
-            /*refrescar lista*/
-            jList3.setListData(Consultas.ventaJPA.verVentas());
-        } catch (NonexistentEntityException ex) {
-            Logger.getLogger(PanelMaquinaExpendedora.class.getName()).log(Level.SEVERE, null, ex);
+            //BORRAR VENTA
+            try {
+                Consultas.ventaJPA.destroy(Integer.parseInt(tokens[0].split("➔ ")[1].trim()));
+                /*refrescar lista*/
+                jList3.setListData(Consultas.ventaJPA.verVentas());
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(PanelMaquinaExpendedora.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jButton3.setBackground(Color.white);
         }
-        jButton3.setBackground(Color.white);
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
+        // SI LA MÁQUINA ESTÁ ENCENDIDA
+        if (jLabel1.getIcon().toString().equals(getClass().getResource("/Images/encender.png").toString())) {
+            //MOSTRAR VENTAS
+            jScrollPane1.setVisible(true);
+            jList3.setVisible(true);
+            jLabel11.setVisible(true);
+            jLabel10.setVisible(true);
+            jButton3.setVisible(true);
+            jButton2.setVisible(true);
+            jLabel13.setVisible(true);
+            jLabel14.setVisible(true);
 
-        //MOSTRAR VENTAS
-        jLabel12.setVisible(false);
-        jLabel11.setVisible(true);
-        jLabel10.setVisible(true);
-        jButton3.setVisible(true);
-        jButton2.setVisible(true);
-        jLabel13.setVisible(true);
-        jLabel14.setVisible(true);
-
-        try {
-            jList3.setListData(Consultas.ventaJPA.verVentas());
-        } catch (NonexistentEntityException ex) {
-            Logger.getLogger(PanelMaquinaExpendedora.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                jList3.setListData(Consultas.ventaJPA.verVentas());
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(PanelMaquinaExpendedora.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         // TODO add your handling code here:
         String linea = jList1.getSelectedValue();
-        String[] tokens = linea.split("\\|");
-        jTextField1.setText(tokens[0].trim());
+        if (linea != null) {
+            String[] tokens = linea.split("\\|");
+            jTextField1.setText(tokens[0].trim());
+        }
     }//GEN-LAST:event_jList1MouseClicked
 
     private void jLabel15MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MousePressed
@@ -383,7 +480,8 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         // TODO add your handling code here:
 
         //OCULTAR VENTAS
-        jLabel12.setVisible(true);
+        jScrollPane1.setVisible(false);
+        jList3.setVisible(false);
         jLabel11.setVisible(false);
         jLabel10.setVisible(false);
         jButton3.setVisible(false);
@@ -394,13 +492,22 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
         // TODO add your handling code here:
-        //VER PRODUCTOS DE LA MÁQUINA
-        try {
-            jList1.setListData(Consultas.maquinaJPA.verProductos(Integer.valueOf(jTextField2.getText())));
-        } catch (NonexistentEntityException ex) {
-            Logger.getLogger(PanelMaquinaExpendedora.class.getName()).log(Level.SEVERE, null, ex);
+        // VER PRODUCTOS DE LA MÁQUINA SELECCIONADA
+        /* si el jTextField2 está vacío, no hace nada */
+        if (!jTextField2.getText().equals("")) {
+            try {
+                jList1.setListData(Consultas.maquinaJPA.verProductos(Integer.parseInt(jTextField2.getText())));
+            } catch (NonexistentEntityException ex) {
+                // Si no existe la máquina seleccionada
+            }
         }
     }//GEN-LAST:event_jButton4MouseClicked
+
+    private void jLabel15MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseReleased
+        // TODO add your handling code here:
+        //CAMBIAR IMAGEN
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/botonCruz.png")));
+    }//GEN-LAST:event_jLabel15MouseReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -410,14 +517,13 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

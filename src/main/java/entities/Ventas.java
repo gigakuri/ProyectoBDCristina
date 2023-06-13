@@ -139,11 +139,11 @@ public class Ventas implements Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(idVenta);
-        sb.append(",").append(new SimpleDateFormat("yyyy-MM-dd").format(fecha));
-        sb.append(",").append(importe);
-        sb.append(",").append(tipoPago);
-        sb.append(",").append(idProducto);
+        sb.append("➔ ").append(idVenta);
+        sb.append(" , ").append(new SimpleDateFormat("yyyy-MM-dd").format(fecha));
+        sb.append(" , ").append(importe);
+        sb.append(" , ").append(tipoPago);
+        sb.append(" , ").append(idProducto);
         return sb.toString();
     }
 
