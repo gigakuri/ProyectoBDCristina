@@ -15,12 +15,10 @@ import entities.Productos;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.swing.ComboBoxModel;
-import javax.swing.event.ListDataListener;
 
 /**
  *
- * @author Gigak
+ * @author cristina
  */
 public class ProductosJpaController implements Serializable {
 
