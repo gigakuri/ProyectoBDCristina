@@ -88,41 +88,42 @@ public class PanelCopiasSeguridad extends javax.swing.JPanel {
         if (linea != null) {
             //SE BORRAN LOS DATOS
             try {
-                for (Maquinas maquina : Consultas.maquinaJPA.findMaquinasEntities()) {
-                    Consultas.maquinaJPA.destroy(maquina.getIdMaquina());
+                for (Ventas venta : Consultas.ventaJPA.findVentasEntities()) {
+                    Consultas.ventaJPA.destroy(venta.getIdVenta());
                 }
                 for (Productos producto : Consultas.productoJPA.findProductosEntities()) {
                     Consultas.productoJPA.destroy(producto.getIdProducto());
                 }
-                for (Ventas venta : Consultas.ventaJPA.findVentasEntities()) {
-                    Consultas.ventaJPA.destroy(venta.getIdVenta());
+                for (Maquinas maquina : Consultas.maquinaJPA.findMaquinasEntities()) {
+                    Consultas.maquinaJPA.destroy(maquina.getIdMaquina());
                 }
             } catch (NonexistentEntityException ex) {
                 Logger.getLogger(PanelCopiasSeguridad.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             //SE LEEN LOS DATOS DE LOS FICHEROS .CSV
-            List<String> datosMaquinas = Utilidades.leerFicheroTexto(linea, "Maquinas");
-            List<String> datosProductos = Utilidades.leerFicheroTexto(linea, "Productos");
-            List<String> datosVentas = Utilidades.leerFicheroTexto(linea, "Ventas");
+            List<String> datosMaquinas = Utilidades.leerFicheroTexto(linea.trim(), "Maquinas");
+            List<String> datosProductos = Utilidades.leerFicheroTexto(linea.trim(), "Productos");
+//            List<String> datosVentas = Utilidades.leerFicheroTexto(linea.trim(), "Ventas");
 
             //SE CREAN LAS LISTAS DE OBJETOS
             List<Maquinas> listaMaquinas = Utilidades.generarMaquinas(datosMaquinas);
             List<Productos> listaProductos = Utilidades.generarProductos(datosProductos);
-             List<Ventas> listaVentas = Utilidades.generarVentas(datosVentas);
+            listaProductos.forEach(System.out::println);
+//            List<Ventas> listaVentas = Utilidades.generarVentas(datosVentas);
 
             //SE VUELCAN LOS DATOS
             for (Maquinas maquina : listaMaquinas) {
                 Consultas.maquinaJPA.create(maquina);
             }
-            for (Productos producto : listaProductos) {
-                Consultas.productoJPA.create(producto);
-            }
-            for (Ventas venta : listaVentas) {
-                Consultas.ventaJPA.create(venta);
+//            for (Productos producto : listaProductos) {
+//                Consultas.productoJPA.create(producto);
+//            }
+//            for (Ventas venta : listaVentas) {
+//                Consultas.ventaJPA.create(venta);
             }
 
-        }
+//        }
     }//GEN-LAST:event_jButton1MouseClicked
 
 

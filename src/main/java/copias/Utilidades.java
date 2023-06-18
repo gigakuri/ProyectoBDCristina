@@ -85,7 +85,7 @@ public class Utilidades {
         List<String> lineas = new ArrayList<>();
 
         try {
-            lineas = Files.readAllLines(Paths.get("./copias" + carpeta + "/" + fichero + ".csv"),
+            lineas = Files.readAllLines(Paths.get("./copias/" + carpeta + "/" + fichero + ".csv"),
                     StandardCharsets.UTF_8);
         } catch (IOException ex) {
             System.out.println("Error leyendo el fichero");
@@ -103,7 +103,7 @@ public class Utilidades {
         String linea;
         List<Maquinas> listaMaquinas = new ArrayList<>();
 
-        for (int i = 1; i < datos.size(); i++) {
+        for (int i = 0; i < datos.size(); i++) {
             linea = datos.get(i);
             tokens = linea.split(",");
 
@@ -120,13 +120,13 @@ public class Utilidades {
         String linea;
         List<Productos> listaProductos = new ArrayList<>();
 
-        for (int i = 1; i < datos.size(); i++) {
+        for (int i = 0; i < datos.size(); i++) {
             linea = datos.get(i);
             tokens = linea.split(",");
 
             listaProductos.add(new Productos(Integer.valueOf(tokens[0]), tokens[1], 
                     BigDecimal.valueOf(Double.parseDouble(tokens[2])), Integer.valueOf(tokens[3]), 
-                    Consultas.maquinaJPA.findMaquinas(Integer.valueOf(tokens[4]))));
+                    Consultas.maquinaJPA.findByNumSerie(tokens[5])));
 
         }
 
@@ -138,7 +138,7 @@ public class Utilidades {
         String linea;
         List<Ventas> listaVentas = new ArrayList<>();
 
-        for (int i = 1; i < datos.size(); i++) {
+        for (int i = 0; i < datos.size(); i++) {
             linea = datos.get(i);
             tokens = linea.split(",");
 

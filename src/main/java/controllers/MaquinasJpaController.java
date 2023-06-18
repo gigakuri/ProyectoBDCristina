@@ -12,6 +12,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entities.Productos;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -210,6 +211,22 @@ public class MaquinasJpaController implements Serializable {
                         + "    " + listaProductos.get(i).getPrecio().toString() + "€";
             }
             return productos;
+    }
+    
+    public Maquinas findByNumSerie(String numSerie){
+        EntityManager em = getEntityManager();
+        
+        Query q = em.createNamedQuery("Maquinas.findByNumSerie");
+        q.setParameter("numSerie", numSerie);
+        return (Maquinas)q.getSingleResult();
+    }
+    
+    public Maquinas findBySaldo(BigDecimal saldo){
+        EntityManager em = getEntityManager();
+        
+        Query q = em.createNamedQuery("Maquinas.findBySaldo");
+        q.setParameter("saldo", saldo);
+        return (Maquinas)q.getSingleResult();
     }
 
 }

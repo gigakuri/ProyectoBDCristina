@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
@@ -1090,7 +1091,8 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
     private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
         // TODO add your handling code here:
         //LISTAR DIRECTORIO COPIAS
-        MaquinaExpendedora.crearVentana("Copias de Seguridad", new PanelCopiasSeguridad());
+        JFrame copiasSeguridad = MaquinaExpendedora.crearVentana("Copias de Seguridad", new PanelCopiasSeguridad());
+        copiasSeguridad.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_jButton9MouseClicked
 
 
