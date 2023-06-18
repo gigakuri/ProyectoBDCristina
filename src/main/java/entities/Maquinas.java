@@ -49,11 +49,13 @@ public class Maquinas implements Serializable {
     public Maquinas() {
     }
 
-    public Maquinas(String numSerie) {
+    public Maquinas(String numSerie, BigDecimal saldo) {
         this.numSerie = numSerie;
+        this.saldo = saldo;
     }
 
-    public Maquinas(String numSerie, BigDecimal saldo) {
+    public Maquinas(Integer idMaquina, String numSerie, BigDecimal saldo) {
+        this.idMaquina = idMaquina;
         this.numSerie = numSerie;
         this.saldo = saldo;
     }

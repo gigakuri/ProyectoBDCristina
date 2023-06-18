@@ -5,16 +5,19 @@
 package application;
 
 import controllers.exceptions.NonexistentEntityException;
+import copias.Utilidades;
 import entities.Maquinas;
 import entities.Productos;
 import entities.Ventas;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +31,7 @@ import javax.swing.ListCellRenderer;
  * @author cristina
  */
 public class PanelMaquinaExpendedora extends javax.swing.JPanel {
-    
+
     private static String tipoPago;
 
     /**
@@ -37,39 +40,39 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
     public PanelMaquinaExpendedora() throws NonexistentEntityException {
         initComponents();
         ListCellRenderer cellRenderer = new DefaultListCellRenderer() {
-            
+
             //FORMATO PARA LOS JLIST
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index,
                     boolean isSelected, boolean cellHasFocus) {
                 JLabel renderer = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                
+
                 String text = value.toString();
                 StringBuilder wrappedText = new StringBuilder("<html>");
                 int comas = 0;
-                
+
                 for (int i = 0; i < text.length(); i++) {
                     char c = text.charAt(i);
                     wrappedText.append(c);
                     if (c == ',') {
                         comas++;
                     }
-                    
+
                     if (comas >= 4 && i < text.length() - 1) {
                         wrappedText.append("<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                         comas = 0;
                     }
                 }
-                
+
                 wrappedText.append("</html>");
                 renderer.setText(wrappedText.toString());
-                
+
                 return renderer;
             }
         };
-        
+
         jList3.setCellRenderer(cellRenderer);
-        
+
         jLabel5.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -116,6 +119,10 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jLabel31.setVisible(false);
         jTextField4.setVisible(false);
         jTextField7.setVisible(false);
+        /*selección de máquina*/
+        for (Maquinas maquina : Consultas.maquinaJPA.findMaquinasEntities()) {
+                    jComboBox3.addItem(maquina.getIdMaquina().toString());
+                }
         jComboBox3.setVisible(false);
         jButton6.setVisible(false);
         jLabel32.setVisible(false);
@@ -127,7 +134,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
 
         //Mostrar lista de máquinas
         jList2.setListData(Consultas.maquinaJPA.verMaquinas());
-        
+
     }
 
     /**
@@ -155,7 +162,6 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList<>();
         jTextField2 = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
@@ -198,6 +204,9 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jTextField8 = new javax.swing.JTextField();
         jButton7 = new javax.swing.JButton();
         jLabel28 = new javax.swing.JLabel();
+        jButton8 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jButton9 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
         jLabel2.setText("jLabel2");
@@ -308,10 +317,6 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jTextField2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 70, 30));
-
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/peluche.png"))); // NOI18N
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 480, -1, -1));
 
         jLabel26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/eliminar.png"))); // NOI18N
         jLabel26.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -554,6 +559,36 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jLabel28.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(153, 153, 153), new java.awt.Color(153, 153, 153), new java.awt.Color(153, 153, 153), new java.awt.Color(153, 153, 153)));
         jPanel1.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 40, 220, 170));
 
+        jButton8.setBackground(new java.awt.Color(0, 51, 51));
+        jButton8.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        jButton8.setForeground(new java.awt.Color(255, 255, 255));
+        jButton8.setText("BACKUP");
+        jButton8.setRequestFocusEnabled(false);
+        jButton8.setRolloverEnabled(false);
+        jButton8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton8MouseClicked(evt);
+            }
+        });
+        jPanel1.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 600, 90, 40));
+
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/peluche.png"))); // NOI18N
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 480, -1, -1));
+
+        jButton9.setBackground(new java.awt.Color(0, 51, 51));
+        jButton9.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        jButton9.setForeground(new java.awt.Color(255, 255, 255));
+        jButton9.setText("RESTAURAR");
+        jButton9.setRequestFocusEnabled(false);
+        jButton9.setRolloverEnabled(false);
+        jButton9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton9MouseClicked(evt);
+            }
+        });
+        jPanel1.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 600, 110, 40));
+
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/background.jpg"))); // NOI18N
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, -1));
@@ -700,13 +735,13 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
             jLabel24.setVisible(true);
             jComboBox2.setVisible(true);
             jComboBox2.setMaximumRowCount(4);
-            //Muestra la id de la venta seleccionada
-            jTextField3.setText(tokens[0].split("➔ ")[1].trim());
-
-            /*muestra los productos*/
+            /*selección de productos*/
+            jComboBox2.removeAllItems();
             for (Productos producto : Consultas.productoJPA.findProductosEntities()) {
                 jComboBox2.addItem(producto.getNombre());
             }
+            //Muestra la id de la venta seleccionada
+            jTextField3.setText(tokens[0].split("➔ ")[1].trim());
 
             /*muestra como seleccionado el producto de la venta a modificar */
             jComboBox2.setSelectedIndex(Consultas.ventaJPA.findVentas(Integer.valueOf(tokens[0].split("➔ ")[1].trim())).getIdProducto().getIdProducto() - 1);
@@ -865,7 +900,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
             jTextField3.setText("");
             jTextField5.setText("");
             jTextField6.setText("");
-            
+
             /*refrescar lista*/
             jList3.setListData(Consultas.ventaJPA.verVentas());
         } catch (Exception ex) {
@@ -888,9 +923,6 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
             jTextField4.setVisible(true);
             jTextField7.setVisible(true);
             jComboBox3.setVisible(true);
-            for (Maquinas maquina : Consultas.maquinaJPA.findMaquinasEntities()) {
-                jComboBox3.addItem(maquina.getIdMaquina().toString());
-            }
             jButton6.setVisible(true);
             jLabel32.setVisible(true);
         }
@@ -905,12 +937,12 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
             /*el precio tiene que ser menor de 10€ para añadir el producto*/
             if (Double.parseDouble(jTextField7.getText()) < 10) {
                 Productos aux = new Productos();
-                
+
                 aux.setNombre(jTextField4.getText());
                 aux.setPrecio(BigDecimal.valueOf(Double.parseDouble(jTextField7.getText())));
                 aux.setIdMaquina(Consultas.maquinaJPA.findMaquinas(Integer.valueOf(jComboBox3.getSelectedItem().toString())));
                 aux.setStock(20);
-                
+
                 try {
                     /*añade el producto*/
                     Consultas.productoJPA.create(aux);
@@ -923,13 +955,12 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
                     Logger.getLogger(PanelMaquinaExpendedora.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
         }
     }//GEN-LAST:event_jButton6MouseClicked
 
     private void jLabel26MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel26MouseClicked
         // TODO add your handling code here:
-
         String linea = jList1.getSelectedValue();
         /* Si selecciona un producto, puede borrarlo */
         if (linea != null) {
@@ -941,7 +972,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
                 /*primero hay que borrar las ventas relacionadas con el producto, 
                 comprobando que hayan ventas de ese producto, y si las hay, se borran*/
                 for (Ventas venta : Consultas.ventaJPA.findVentasEntities()) {
-                    
+
                     if (Objects.equals(venta.getIdProducto().getIdProducto(), Integer.valueOf(tokens[0].trim()))) {
                         Consultas.ventaJPA.destroy(venta.getIdVenta());
                     }
@@ -970,41 +1001,43 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         String[] tokens = linea.split("\\|");
         Productos productoSeleccionado = Consultas.productoJPA.findProductos(Integer.valueOf(tokens[0].trim()));
         Productos aux = new Productos();
+        /*el ID no cambia*/
         aux.setIdProducto(productoSeleccionado.getIdProducto());
 
         /*si el nombre no está vacío*/
-        if (jTextField4.getText() != null) {
-            /*el precio tiene que ser menor de 10€ para modificar el producto*/
-            if (Double.parseDouble(jTextField7.getText()) < 10) {
-                
-                aux.setNombre(jTextField4.getText());
-                aux.setPrecio(BigDecimal.valueOf(Double.parseDouble(jTextField7.getText())));
-                aux.setIdMaquina(Consultas.maquinaJPA.findMaquinas(Integer.valueOf(jComboBox3.getSelectedItem().toString())));
-                if (jTextField8.getText() != null) {
-                    aux.setStock(Integer.valueOf(jTextField8.getText()));
-                } else {
-                    aux.setStock(productoSeleccionado.getStock());
-                }
-                
-                try {
-                    /*cambia el producto*/
-                    Consultas.productoJPA.edit(aux);
-                    jTextField4.setText("");
-                    jTextField7.setText("");
-                    jTextField8.setText("");
-
-                    /*refrescar lista*/
-                    jList1.setListData(Consultas.maquinaJPA.verProductos(Integer.parseInt(jComboBox3.getSelectedItem().toString())));
-                } catch (Exception ex) {
-                    Logger.getLogger(PanelMaquinaExpendedora.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else {
-                aux.setPrecio(productoSeleccionado.getPrecio());
-            }
-            
+        if (!"".equals(jTextField4.getText())) {
+            aux.setNombre(jTextField4.getText());
         } else {
             aux.setNombre(productoSeleccionado.getNombre());
         }
+        /*el precio tiene que ser menor de 10€ para modificar el producto*/
+        if (Double.parseDouble(jTextField7.getText()) < 10 | !"".equals(jTextField7.getText())) {
+            aux.setPrecio(BigDecimal.valueOf(Double.parseDouble(jTextField7.getText())));
+        } else {
+            aux.setPrecio(productoSeleccionado.getPrecio());
+        }
+            aux.setIdMaquina(Consultas.maquinaJPA.findMaquinas(Integer.valueOf(jComboBox3.getSelectedItem().toString())));
+        /*si el stock no está vacío*/
+        if (!"".equals(jTextField8.getText())) {
+            aux.setStock(Integer.valueOf(jTextField8.getText()));
+        } else {
+            aux.setStock(productoSeleccionado.getStock());
+        }
+
+        try {
+            /*cambia el producto*/
+            Consultas.productoJPA.edit(aux);
+            jTextField4.setText("");
+            jTextField7.setText("");
+            jTextField8.setText("");
+
+            /*refrescar lista*/
+            jList1.setListData(Consultas.maquinaJPA.verProductos(Integer.parseInt(jComboBox3.getSelectedItem().toString())));
+        } catch (Exception ex) {
+            Logger.getLogger(PanelMaquinaExpendedora.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
     }//GEN-LAST:event_jButton7MouseClicked
 
     private void jLabel27MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel27MouseClicked
@@ -1025,9 +1058,6 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
                 jTextField4.setVisible(true);
                 jTextField7.setVisible(true);
                 jComboBox3.setVisible(true);
-                for (Maquinas maquina : Consultas.maquinaJPA.findMaquinasEntities()) {
-                    jComboBox3.addItem(maquina.getIdMaquina().toString());
-                }
                 jButton7.setVisible(true);
                 jLabel32.setVisible(true);
                 jLabel33.setVisible(true);
@@ -1036,6 +1066,32 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         }
 
     }//GEN-LAST:event_jLabel27MouseClicked
+
+    private void jButton8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton8MouseClicked
+        // TODO add your handling code here:
+        //BACKUPS
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH'h'-mm'm'-ss's'");
+        
+        //CREA EL DIRECTORIO
+        Utilidades.crearDirectorio("copias");
+        Utilidades.crearDirectorio("./copias/" + LocalDateTime.now().format(formatter));
+        
+        //CREA LOS FICHEROS
+        /*guarda los datos en una lista y escribe los csv*/
+        List<Maquinas> listaMaquinas = Consultas.maquinaJPA.findMaquinasEntities();
+        Utilidades.generarCSV("./copias/" + LocalDateTime.now().format(formatter) + "/Maquinas" + ".csv", listaMaquinas.toArray());
+        List<Productos> listaProductos = Consultas.productoJPA.findProductosEntities();
+        Utilidades.generarCSV("./copias/" + LocalDateTime.now().format(formatter) + "/Productos" + ".csv", listaProductos.toArray());
+        List<Ventas> listaVentas = Consultas.ventaJPA.findVentasEntities();
+        Utilidades.generarCSV("./copias/" + LocalDateTime.now().format(formatter) + "/Ventas" + ".csv", listaVentas.toArray());
+
+    }//GEN-LAST:event_jButton8MouseClicked
+
+    private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
+        // TODO add your handling code here:
+        //LISTAR DIRECTORIO COPIAS
+        MaquinaExpendedora.crearVentana("Copias de Seguridad", new PanelCopiasSeguridad());
+    }//GEN-LAST:event_jButton9MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1048,6 +1104,8 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
