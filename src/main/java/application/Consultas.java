@@ -27,11 +27,11 @@ public class Consultas {
     
     public static void main(String[] args) throws Exception {
         
-        System.out.println(
-        "--- Prueba los métodos de consulta incluidos en los controladores ---\n" +
-        "--- Prueba a crear una entidad de cada tipo ---\n" +
-        "--- Prueba a modificar una entidad de cada tipo ---\n" +
-        "--- Prueba a borrar una entidad de cada tipo ---");
+        System.out.println("""
+                           --- Prueba los métodos de consulta incluidos en los controladores ---
+                           --- Prueba a crear una entidad de cada tipo ---
+                           --- Prueba a modificar una entidad de cada tipo ---
+                           --- Prueba a borrar una entidad de cada tipo ---""");
         
         
         //CONSULTA

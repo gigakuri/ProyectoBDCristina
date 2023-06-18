@@ -28,7 +28,7 @@ import javax.swing.ListCellRenderer;
  * @author cristina
  */
 public class PanelMaquinaExpendedora extends javax.swing.JPanel {
-
+    
     private static String tipoPago;
 
     /**
@@ -37,38 +37,39 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
     public PanelMaquinaExpendedora() throws NonexistentEntityException {
         initComponents();
         ListCellRenderer cellRenderer = new DefaultListCellRenderer() {
-
+            
+            //FORMATO PARA LOS JLIST
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index,
                     boolean isSelected, boolean cellHasFocus) {
                 JLabel renderer = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
+                
                 String text = value.toString();
                 StringBuilder wrappedText = new StringBuilder("<html>");
                 int comas = 0;
-
+                
                 for (int i = 0; i < text.length(); i++) {
                     char c = text.charAt(i);
                     wrappedText.append(c);
                     if (c == ',') {
                         comas++;
                     }
-
+                    
                     if (comas >= 4 && i < text.length() - 1) {
                         wrappedText.append("<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                         comas = 0;
                     }
                 }
-
+                
                 wrappedText.append("</html>");
                 renderer.setText(wrappedText.toString());
-
+                
                 return renderer;
             }
         };
-
+        
         jList3.setCellRenderer(cellRenderer);
-
+        
         jLabel5.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -126,7 +127,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
 
         //Mostrar lista de máquinas
         jList2.setListData(Consultas.maquinaJPA.verMaquinas());
-
+        
     }
 
     /**
@@ -861,6 +862,10 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         //Cambia la venta
         try {
             Consultas.ventaJPA.edit(aux);
+            jTextField3.setText("");
+            jTextField5.setText("");
+            jTextField6.setText("");
+            
             /*refrescar lista*/
             jList3.setListData(Consultas.ventaJPA.verVentas());
         } catch (Exception ex) {
@@ -873,7 +878,8 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         // TODO add your handling code here:
         // SI LA MÁQUINA ESTÁ ENCENDIDA
         if (jLabel1.getIcon().toString().equals(getClass().getResource("/Images/encender.png").toString())
-                && !jLabel28.isVisible()) { /*y no está visible el apartado de modificar*/
+                && !jLabel28.isVisible()) {
+            /*y no está visible el apartado de modificar*/
             //MOSTRAR APARTADO AÑADIR PRODUCTO
             jLabel28.setVisible(true);
             jLabel29.setVisible(true);
@@ -899,15 +905,17 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
             /*el precio tiene que ser menor de 10€ para añadir el producto*/
             if (Double.parseDouble(jTextField7.getText()) < 10) {
                 Productos aux = new Productos();
-
+                
                 aux.setNombre(jTextField4.getText());
                 aux.setPrecio(BigDecimal.valueOf(Double.parseDouble(jTextField7.getText())));
                 aux.setIdMaquina(Consultas.maquinaJPA.findMaquinas(Integer.valueOf(jComboBox3.getSelectedItem().toString())));
                 aux.setStock(20);
-
+                
                 try {
                     /*añade el producto*/
                     Consultas.productoJPA.create(aux);
+                    jTextField4.setText("");
+                    jTextField7.setText("");
 
                     /*refrescar lista*/
                     jList1.setListData(Consultas.maquinaJPA.verProductos(Integer.parseInt(jComboBox3.getSelectedItem().toString())));
@@ -915,7 +923,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
                     Logger.getLogger(PanelMaquinaExpendedora.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-
+            
         }
     }//GEN-LAST:event_jButton6MouseClicked
 
@@ -933,7 +941,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
                 /*primero hay que borrar las ventas relacionadas con el producto, 
                 comprobando que hayan ventas de ese producto, y si las hay, se borran*/
                 for (Ventas venta : Consultas.ventaJPA.findVentasEntities()) {
-
+                    
                     if (Objects.equals(venta.getIdProducto().getIdProducto(), Integer.valueOf(tokens[0].trim()))) {
                         Consultas.ventaJPA.destroy(venta.getIdVenta());
                     }
@@ -956,38 +964,47 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
     }//GEN-LAST:event_jLabel26MouseClicked
 
     private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
-//        // TODO add your handling code here:
-//        //MODIFICAR PRODUCTO
-//        String linea = jList1.getSelectedValue();
-//        // Si selecciona un producto, puede crear la venta
-//        if (linea != null) {
-//            String[] tokens = linea.split("\\|");
-//            Productos aux = new Productos();
-//            /*si el nombre no está vacío*/
-//            if (jTextField4.getText() != null) {
-//                /*el precio tiene que ser menor de 10€ para añadir el producto*/
-//                if (Double.parseDouble(jTextField7.getText()) < 10) {
-//
-//                    aux.setNombre(jTextField4.getText());
-//                    aux.setPrecio(BigDecimal.valueOf(Double.parseDouble(jTextField7.getText())));
-//                    aux.setIdMaquina(Consultas.maquinaJPA.findMaquinas(Integer.valueOf(jComboBox3.getSelectedItem().toString())));
-//                    aux.setStock(20);
-//
-//                    try {
-//                        /*añade el producto*/
-//                        Consultas.productoJPA.create(aux);
-//
-//                        /*refrescar lista*/
-//                        jList1.setListData(Consultas.maquinaJPA.verProductos(Integer.parseInt(jComboBox3.getSelectedItem().toString())));
-//                    } catch (NonexistentEntityException ex) {
-//                        Logger.getLogger(PanelMaquinaExpendedora.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//                }
-//
-//            } else {
-//                aux.setNombre();
-//            }
-//        }
+        // TODO add your handling code here:
+        //MODIFICAR PRODUCTO
+        String linea = jList1.getSelectedValue();
+        String[] tokens = linea.split("\\|");
+        Productos productoSeleccionado = Consultas.productoJPA.findProductos(Integer.valueOf(tokens[0].trim()));
+        Productos aux = new Productos();
+        aux.setIdProducto(productoSeleccionado.getIdProducto());
+
+        /*si el nombre no está vacío*/
+        if (jTextField4.getText() != null) {
+            /*el precio tiene que ser menor de 10€ para modificar el producto*/
+            if (Double.parseDouble(jTextField7.getText()) < 10) {
+                
+                aux.setNombre(jTextField4.getText());
+                aux.setPrecio(BigDecimal.valueOf(Double.parseDouble(jTextField7.getText())));
+                aux.setIdMaquina(Consultas.maquinaJPA.findMaquinas(Integer.valueOf(jComboBox3.getSelectedItem().toString())));
+                if (jTextField8.getText() != null) {
+                    aux.setStock(Integer.valueOf(jTextField8.getText()));
+                } else {
+                    aux.setStock(productoSeleccionado.getStock());
+                }
+                
+                try {
+                    /*cambia el producto*/
+                    Consultas.productoJPA.edit(aux);
+                    jTextField4.setText("");
+                    jTextField7.setText("");
+                    jTextField8.setText("");
+
+                    /*refrescar lista*/
+                    jList1.setListData(Consultas.maquinaJPA.verProductos(Integer.parseInt(jComboBox3.getSelectedItem().toString())));
+                } catch (Exception ex) {
+                    Logger.getLogger(PanelMaquinaExpendedora.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                aux.setPrecio(productoSeleccionado.getPrecio());
+            }
+            
+        } else {
+            aux.setNombre(productoSeleccionado.getNombre());
+        }
     }//GEN-LAST:event_jButton7MouseClicked
 
     private void jLabel27MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel27MouseClicked
