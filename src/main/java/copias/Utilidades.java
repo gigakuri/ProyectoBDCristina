@@ -4,7 +4,10 @@
  */
 package copias;
 
+import application.Consultas;
 import entities.Maquinas;
+import entities.Productos;
+import entities.Ventas;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -14,6 +17,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,11 +107,49 @@ public class Utilidades {
             linea = datos.get(i);
             tokens = linea.split(",");
 
-            listaMaquinas.add(new Maquinas(Integer.valueOf(tokens[0]), tokens[1], BigDecimal.valueOf(Double.parseDouble(tokens[2]))));
+            listaMaquinas.add(new Maquinas(Integer.valueOf(tokens[0]), tokens[1], 
+                    BigDecimal.valueOf(Double.parseDouble(tokens[2]))));
 
         }
 
         return listaMaquinas;
+    }
+    
+    public static List<Productos> generarProductos(List<String> datos) {
+        String[] tokens;
+        String linea;
+        List<Productos> listaProductos = new ArrayList<>();
+
+        for (int i = 1; i < datos.size(); i++) {
+            linea = datos.get(i);
+            tokens = linea.split(",");
+
+            listaProductos.add(new Productos(Integer.valueOf(tokens[0]), tokens[1], 
+                    BigDecimal.valueOf(Double.parseDouble(tokens[2])), Integer.valueOf(tokens[3]), 
+                    Consultas.maquinaJPA.findMaquinas(Integer.valueOf(tokens[4]))));
+
+        }
+
+        return listaProductos;
+    }
+    
+    public static List<Ventas> generarVentas(List<String> datos) {
+        String[] tokens;
+        String linea;
+        List<Ventas> listaVentas = new ArrayList<>();
+
+        for (int i = 1; i < datos.size(); i++) {
+            linea = datos.get(i);
+            tokens = linea.split(",");
+
+            listaVentas.add(new Ventas(Integer.valueOf(tokens[0].split("➔ ")[1].trim()), 
+                    Date.valueOf(tokens[1].trim()), 
+                    BigDecimal.valueOf(Double.parseDouble(tokens[2].trim())), tokens[3].trim(), 
+                    Consultas.productoJPA.findByNombre(tokens[4].trim())));
+
+        }
+
+        return listaVentas;
     }
 
 }

@@ -64,6 +64,14 @@ public class Productos implements Serializable {
         this.idMaquina = idMaquina;
     }
 
+    public Productos(Integer idProducto, String nombre, BigDecimal precio, Integer stock, Maquinas idMaquina) {
+        this.idProducto = idProducto;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.stock = stock;
+        this.idMaquina = idMaquina;
+    }
+
     public Integer getIdProducto() {
         return idProducto;
     }

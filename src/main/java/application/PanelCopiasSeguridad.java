@@ -82,39 +82,47 @@ public class PanelCopiasSeguridad extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-//        // TODO add your handling code here:
-//        String linea = jList1.getSelectedValue();
-//        /* Si selecciona un producto, puede borrarlo */
-//        if (linea != null) {
-//            //SE BORRAN LOS DATOS
-//            try {
-//                for (Maquinas maquina : Consultas.maquinaJPA.findMaquinasEntities()) {
-//                    Consultas.maquinaJPA.destroy(maquina.getIdMaquina());
-//                }
-//                for (Productos producto : Consultas.productoJPA.findProductosEntities()) {
-//                    Consultas.productoJPA.destroy(producto.getIdProducto());
-//                }
-//                for (Ventas venta : Consultas.ventaJPA.findVentasEntities()) {
-//                    Consultas.ventaJPA.destroy(venta.getIdVenta());
-//                }
-//            } catch (NonexistentEntityException ex) {
-//                Logger.getLogger(PanelCopiasSeguridad.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//
-//            //SE LEEN LOS DATOS DE LOS FICHEROS .CSV
-//            List<String> datosMaquinas = Utilidades.leerFicheroTexto(linea, "Maquinas");
-//            List<String> datosProductos = Utilidades.leerFicheroTexto(linea, "Productos");
-//            List<String> datosVentas = Utilidades.leerFicheroTexto(linea, "Ventas");
-//
-//            //SE CREAN LAS LISTAS DE OBJETOS
-//            List<Maquinas> listaMaquinas = Utilidades.generarMaquinas(datosMaquinas);
-//
-//            //SE VUELCAN LOS DATOS
-//            for (Maquinas maquina : listaMaquinas) {
-//                Consultas.maquinaJPA.create(maquina);
-//            }
-//
-//        }
+        // TODO add your handling code here:
+        String linea = jList1.getSelectedValue();
+        /* Si selecciona un producto, puede borrarlo */
+        if (linea != null) {
+            //SE BORRAN LOS DATOS
+            try {
+                for (Maquinas maquina : Consultas.maquinaJPA.findMaquinasEntities()) {
+                    Consultas.maquinaJPA.destroy(maquina.getIdMaquina());
+                }
+                for (Productos producto : Consultas.productoJPA.findProductosEntities()) {
+                    Consultas.productoJPA.destroy(producto.getIdProducto());
+                }
+                for (Ventas venta : Consultas.ventaJPA.findVentasEntities()) {
+                    Consultas.ventaJPA.destroy(venta.getIdVenta());
+                }
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(PanelCopiasSeguridad.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            //SE LEEN LOS DATOS DE LOS FICHEROS .CSV
+            List<String> datosMaquinas = Utilidades.leerFicheroTexto(linea, "Maquinas");
+            List<String> datosProductos = Utilidades.leerFicheroTexto(linea, "Productos");
+            List<String> datosVentas = Utilidades.leerFicheroTexto(linea, "Ventas");
+
+            //SE CREAN LAS LISTAS DE OBJETOS
+            List<Maquinas> listaMaquinas = Utilidades.generarMaquinas(datosMaquinas);
+            List<Productos> listaProductos = Utilidades.generarProductos(datosProductos);
+             List<Ventas> listaVentas = Utilidades.generarVentas(datosVentas);
+
+            //SE VUELCAN LOS DATOS
+            for (Maquinas maquina : listaMaquinas) {
+                Consultas.maquinaJPA.create(maquina);
+            }
+            for (Productos producto : listaProductos) {
+                Consultas.productoJPA.create(producto);
+            }
+            for (Ventas venta : listaVentas) {
+                Consultas.ventaJPA.create(venta);
+            }
+
+        }
     }//GEN-LAST:event_jButton1MouseClicked
 
 
