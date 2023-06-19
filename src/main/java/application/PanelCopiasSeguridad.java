@@ -4,6 +4,7 @@
  */
 package application;
 
+import static application.MaquinaExpendedora.crearVentana;
 import controllers.exceptions.NonexistentEntityException;
 import copias.Utilidades;
 import entities.Maquinas;
@@ -12,12 +13,15 @@ import entities.Ventas;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 /**
  *
- * @author Gigak
+ * @author cristina
  */
 public class PanelCopiasSeguridad extends javax.swing.JPanel {
+    
+    private static JFrame copiasSeguridad;
 
     /**
      * Creates new form PanelCopiasSeguridad
@@ -26,6 +30,8 @@ public class PanelCopiasSeguridad extends javax.swing.JPanel {
         initComponents();
 
         jList1.setListData(Utilidades.listarDirectorio("./copias"));
+        copiasSeguridad = MaquinaExpendedora.crearVentana("Copias de Seguridad", this);
+        copiasSeguridad.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -84,7 +90,7 @@ public class PanelCopiasSeguridad extends javax.swing.JPanel {
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
         String linea = jList1.getSelectedValue();
-        /* Si selecciona un producto, puede borrarlo */
+        /* tiene que tener una copia seleccionada */
         if (linea != null) {
             //SE BORRAN LOS DATOS
             try {
@@ -104,26 +110,32 @@ public class PanelCopiasSeguridad extends javax.swing.JPanel {
             //SE LEEN LOS DATOS DE LOS FICHEROS .CSV
             List<String> datosMaquinas = Utilidades.leerFicheroTexto(linea.trim(), "Maquinas");
             List<String> datosProductos = Utilidades.leerFicheroTexto(linea.trim(), "Productos");
-//            List<String> datosVentas = Utilidades.leerFicheroTexto(linea.trim(), "Ventas");
+            List<String> datosVentas = Utilidades.leerFicheroTexto(linea.trim(), "Ventas");
 
-            //SE CREAN LAS LISTAS DE OBJETOS
+            //SE CREAN LAS LISTAS DE OBJETOS Y SE VUELCAN LOS DATOS
             List<Maquinas> listaMaquinas = Utilidades.generarMaquinas(datosMaquinas);
-            List<Productos> listaProductos = Utilidades.generarProductos(datosProductos);
-            listaProductos.forEach(System.out::println);
-//            List<Ventas> listaVentas = Utilidades.generarVentas(datosVentas);
-
-            //SE VUELCAN LOS DATOS
             for (Maquinas maquina : listaMaquinas) {
                 Consultas.maquinaJPA.create(maquina);
             }
-//            for (Productos producto : listaProductos) {
-//                Consultas.productoJPA.create(producto);
-//            }
-//            for (Ventas venta : listaVentas) {
-//                Consultas.ventaJPA.create(venta);
+            
+            List<Productos> listaProductos = Utilidades.generarProductos(datosProductos);
+            for (Productos producto : listaProductos) {
+                Consultas.productoJPA.create(producto);
             }
-
-//        }
+            
+            List<Ventas> listaVentas = Utilidades.generarVentas(datosVentas);
+            for (Ventas venta : listaVentas) {
+                Consultas.ventaJPA.create(venta);
+            }
+            
+            //CERRAR COPIAS Y ABRIR PANEL PRINCIPAL
+            copiasSeguridad.dispose();
+            try {
+                new PanelMaquinaExpendedora();
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(PanelCopiasSeguridad.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jButton1MouseClicked
 
 

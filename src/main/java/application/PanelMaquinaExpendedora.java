@@ -4,6 +4,7 @@
  */
 package application;
 
+import static application.MaquinaExpendedora.crearVentana;
 import controllers.exceptions.NonexistentEntityException;
 import copias.Utilidades;
 import entities.Maquinas;
@@ -34,6 +35,7 @@ import javax.swing.ListCellRenderer;
 public class PanelMaquinaExpendedora extends javax.swing.JPanel {
 
     private static String tipoPago;
+    private static JFrame ventana;
 
     /**
      * Creates new form PanelMaquinaExpendedora
@@ -132,9 +134,26 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jButton7.setVisible(false);
         jLabel33.setVisible(false);
         jTextField8.setVisible(false);
+        
+        // OCULTAR BACKUP Y RESTAURAR
+        jButton8.setVisible(false);
+        jButton9.setVisible(false);
+        
+        // OCULTAR ELIMINAR, EDITAR, INSERTAR PRODUCTOS
+        jLabel25.setVisible(false);
+        jLabel26.setVisible(false);
+        jLabel27.setVisible(false);
+        
+        // OCULTAR COMPRAR, TIPOPAGO, VENTAS, X
+        jLabel9.setVisible(false);
+        jComboBox1.setVisible(false);
+        jButton1.setVisible(false);
+        jLabel15.setVisible(false);
 
         //Mostrar lista de máquinas
         jList2.setListData(Consultas.maquinaJPA.verMaquinas());
+        
+        ventana = crearVentana("Máquina expendedora", this);
 
     }
 
@@ -208,6 +227,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         jButton8 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jButton9 = new javax.swing.JButton();
+        jLabel34 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
         jLabel2.setText("jLabel2");
@@ -590,6 +610,9 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
         });
         jPanel1.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 600, 110, 40));
 
+        jLabel34.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/maceta.png"))); // NOI18N
+        jPanel1.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 390, -1, -1));
+
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/background.jpg"))); // NOI18N
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, -1));
@@ -628,6 +651,18 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
             jButton4.setVisible(true);
             jLabel18.setVisible(true);
             jLabel23.setVisible(true);
+            // MOSTRAR BACKUP Y RESTAURAR
+            jButton8.setVisible(true);
+            jButton9.setVisible(true);
+            // MOSTRAR ELIMINAR, EDITAR, INSERTAR PRODUCTOS
+            jLabel25.setVisible(true);
+            jLabel26.setVisible(true);
+            jLabel27.setVisible(true);
+            // MOSTRAR COMPRAR, TIPOPAGO, VENTAS, X
+            jLabel9.setVisible(true);
+            jComboBox1.setVisible(true);
+            jButton1.setVisible(true);
+            jLabel15.setVisible(true);
         } else {
             /* SI LA MÁQUINA ESTÁ ENCENDIDA */
             //OCULTAR SELECCIÓN DE MÁQUINAS
@@ -686,6 +721,21 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
             jButton7.setVisible(false);
             jLabel33.setVisible(false);
             jTextField8.setVisible(false);
+            
+            // OCULTAR BACKUP Y RESTAURAR
+            jButton8.setVisible(false);
+            jButton9.setVisible(false);
+            
+            // OCULTAR ELIMINAR, EDITAR, INSERTAR PRODUCTOS
+            jLabel25.setVisible(false);
+            jLabel26.setVisible(false);
+            jLabel27.setVisible(false);
+            
+            // OCULTAR COMPRAR, TIPOPAGO, VENTAS, X
+            jLabel9.setVisible(false);
+            jComboBox1.setVisible(false);
+            jButton1.setVisible(false);
+            jLabel15.setVisible(false);
         }
     }//GEN-LAST:event_jLabel1MouseClicked
 
@@ -745,7 +795,11 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
             jTextField3.setText(tokens[0].split("➔ ")[1].trim());
 
             /*muestra como seleccionado el producto de la venta a modificar */
-            jComboBox2.setSelectedIndex(Consultas.ventaJPA.findVentas(Integer.valueOf(tokens[0].split("➔ ")[1].trim())).getIdProducto().getIdProducto() - 1);
+            try{
+                jComboBox2.setSelectedIndex(Consultas.ventaJPA.findVentas(Integer.valueOf(tokens[0].split("➔ ")[1].trim())).getIdProducto().getIdProducto() - 1);
+            } catch(Exception e){
+                
+            }
         }
     }//GEN-LAST:event_jButton2MouseClicked
 
@@ -1091,8 +1145,10 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
     private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
         // TODO add your handling code here:
         //LISTAR DIRECTORIO COPIAS
-        JFrame copiasSeguridad = MaquinaExpendedora.crearVentana("Copias de Seguridad", new PanelCopiasSeguridad());
-        copiasSeguridad.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        new PanelCopiasSeguridad();
+        
+        //CERRAR VENTANA
+        ventana.dispose();
     }//GEN-LAST:event_jButton9MouseClicked
 
 
@@ -1138,6 +1194,7 @@ public class PanelMaquinaExpendedora extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

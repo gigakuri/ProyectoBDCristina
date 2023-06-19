@@ -220,13 +220,5 @@ public class MaquinasJpaController implements Serializable {
         q.setParameter("numSerie", numSerie);
         return (Maquinas)q.getSingleResult();
     }
-    
-    public Maquinas findBySaldo(BigDecimal saldo){
-        EntityManager em = getEntityManager();
-        
-        Query q = em.createNamedQuery("Maquinas.findBySaldo");
-        q.setParameter("saldo", saldo);
-        return (Maquinas)q.getSingleResult();
-    }
 
 }

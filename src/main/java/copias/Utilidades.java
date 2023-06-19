@@ -90,9 +90,6 @@ public class Utilidades {
         } catch (IOException ex) {
             System.out.println("Error leyendo el fichero");
         }
-        for (String linea : lineas) {
-            System.out.println(linea);
-        }
 
         return lineas;
 
@@ -111,6 +108,8 @@ public class Utilidades {
                     BigDecimal.valueOf(Double.parseDouble(tokens[2]))));
 
         }
+        
+        System.out.println("Máquinas restauradas correctamente");
 
         return listaMaquinas;
     }
@@ -129,6 +128,8 @@ public class Utilidades {
                     Consultas.maquinaJPA.findByNumSerie(tokens[5])));
 
         }
+        
+        System.out.println("Productos restaurados correctamente");
 
         return listaProductos;
     }
@@ -138,16 +139,18 @@ public class Utilidades {
         String linea;
         List<Ventas> listaVentas = new ArrayList<>();
 
-        for (int i = 0; i < datos.size(); i++) {
+        for (int i = 0; i < datos.size()-1; i++) {
             linea = datos.get(i);
             tokens = linea.split(",");
 
-            listaVentas.add(new Ventas(Integer.valueOf(tokens[0].split("➔ ")[1].trim()), 
+            listaVentas.add(new Ventas(Integer.valueOf(tokens[0].trim().split("➔ ")[1].trim()), 
                     Date.valueOf(tokens[1].trim()), 
                     BigDecimal.valueOf(Double.parseDouble(tokens[2].trim())), tokens[3].trim(), 
-                    Consultas.productoJPA.findByNombre(tokens[4].trim())));
+                    Consultas.productoJPA.findByNombre(tokens[5].trim())));
 
         }
+        
+        System.out.println("Ventas restauradas correctamente");
 
         return listaVentas;
     }
